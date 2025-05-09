@@ -12,8 +12,9 @@ class Foo extends Context.Tag("Foo")<Foo, { readonly bar: string }>() {
  * try to get the `Foo` service from context manually :)
  */
 
-const test1 = Effect.gen(function* () {
-  const foo = { bar: "hint: look at Effect.context" };
+const test1 = Effect.gen(function* (_) {
+  const context = yield* _(Effect.context<Foo>());
+  const foo = Context.get(context, Foo);
   return foo.bar;
 }).pipe(Effect.provide(Foo.Live));
 

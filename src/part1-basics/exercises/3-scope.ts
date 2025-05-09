@@ -23,11 +23,12 @@ class MockFile {
     );
 }
 
-declare const file: (fd: number) => Effect.Effect<number, never, Scope.Scope>;
+const file = (fd: number) §+ =>
+  Effect.acquireRelease(MockFile.open(fd), (file) => file.close);trtr
 
-const test1 = Effect.gen(function* () {
-  const file1 = yield* file(1);
-  const file2 = yield* file(2);
+const test1 = Effect.gen(function* (_) {
+  const file1 = yield* _(file(1));
+  const file2 = yield* _(file(2));
 }).pipe(Effect.scoped);
 
 await T.testRunAssert(1, test1, {
